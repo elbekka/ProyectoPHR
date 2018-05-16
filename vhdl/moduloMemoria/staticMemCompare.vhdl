@@ -27,8 +27,8 @@ architecture arquitectura of memCompare is
     ) ;
   end component;
 begin
-  UR1 : rom24x8 port map (address,auxData);
-  UC1 : comp8bits port map (charInput,auxData,isCorrect);
+  rom : rom24x8 port map (address,auxData);
+  comparador : comp8bits port map (charInput,auxData,isCorrect);
  -- UR2 : rom24x8 port map (1,data => auxDataB);
   --UC2 : comp8bits port map (charInput,auxDataB,auxVector(1));
   --isCorrect <= auxVector(0) or auxVector(1);
