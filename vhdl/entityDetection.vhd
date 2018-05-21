@@ -3,19 +3,18 @@ use ieee.std_logic_1164.all;
 
 entity entityDetection is
   port (
-    charInput : in std_logic_vector(7 downto 0);
-    Y: out std_logic;
-    state: out std_logic_vector(2 downto 0);
-    reset: in std_logic;
-    clk: in std_logic
+    clk: in std_logic;
+    reset : in std_logic;
+    bitInput : in std_logic_vector(7 downto 0);
+    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
   ) ;
 end entity;
 
 architecture arquitectura of entityDetection is
-
-    
-    signal internal_state:std_logic_vector(2 downto 0); 
+ 
     signal auxCorrect0,auxCorrect1,auxCorrect2,auxCorrect3,auxCorrect4,auxCorrect5:std_logic;
+    type state_type is (A,B,C,D,E,F,G,H);
+    signal state : state_type := A ;
 
     component memCompare
     port (
@@ -24,72 +23,65 @@ architecture arquitectura of entityDetection is
     isCorrect : out std_logic
   ) ;
     end component;
-begin    
-salida:process (internal_state) is
-begin
-    case internal_state is
-	when "110" =>Y <='1';
-	when others =>Y <='0';
-    end case;
-end process salida;
 
+begin
 --LLAMADAS A LAS ENTIDADES
 
-comp1 : memCompare port map (charInput,4,auxCorrect0);
-comp2 : memCompare port map (charInput,13,auxCorrect1);
-comp3 : memCompare port map (charInput,19,auxCorrect2);
-comp4 : memCompare port map (charInput,8,auxCorrect3);
-comp5 : memCompare port map (charInput,19,auxCorrect4);
-comp6 : memCompare port map (charInput,24,auxCorrect5);
+comp1 : memCompare port map (bitInput,4,isCorrect=>auxCorrect0);
+comp2 : memCompare port map (bitInput,13,isCorrect=>auxCorrect1);
+comp3 : memCompare port map (bitInput,19,isCorrect=>auxCorrect2);
+comp4 : memCompare port map (bitInput,8,isCorrect=>auxCorrect3);
+comp5 : memCompare port map (bitInput,19,isCorrect=>auxCorrect4);
+comp6 : memCompare port map (bitInput,24,isCorrect=>auxCorrect5);
 
-
-proximo_estado:process(clk,reset)
-begin
+process (clk)
+    begin
 	if(reset='1') then
-		internal_state<="111";
+		detectedBit <='0' ;
+        state <= A;
 	elsif(rising_edge(clk)) then
-		case internal_state is
-			when "000"=>
-				if auxCorrect0='1' then
-					internal_state<="001";
+		case state is
+			when A=>
+                		detectedBit <='0' ;
+                		if(auxCorrect0 = '1') then
+                 		   state <=B;
 				else
-					internal_state<="111";
-				end if;
-			when "001"=>
-				if auxCorrect1='1' then
-					internal_state<="010";
+                    		   state <=A;
+               			end if;
+			when B=>
+				if(auxCorrect1 = '1') then
+                 		   state <=C;
 				else
-					internal_state<="111";		
-				end if;	
-			when "010"=>
-				if auxCorrect2='1' then
-					internal_state<="011";
+                    		   state <=A;
+               			end if;
+			when C=>
+				if(auxCorrect2 = '1') then
+                 		   state <=D;
 				else
-					internal_state<="111";
-				end if;
-			when "011"=>
-				if auxCorrect3='1' then
-					internal_state<="100";
+                    		   state <=A;
+               			end if;
+			when D=>
+				if(auxCorrect3 = '1') then
+                 		   state <=E;
 				else
-					internal_state<="111";
-				end if;
-			when "100"=>
-				if auxCorrect4='1' then
-					internal_state<="101";
+                    		   state <=A;
+               			end if;
+			when E=>
+				if(auxCorrect4 = '1') then
+                 		   state <=F;
 				else
-					internal_state<="111";
-				end if;
-			when "101"=>
-				if auxCorrect5='1' then
-					internal_state<="110";
-				else
-					internal_state<="111";
-				end if;
+                    		   state <=A;
+               			end if;
+			when F=>
+				if(auxCorrect5 = '1') then
+                       		  detectedBit <= '1' ;
+                       		  state <=A;
+                   		else
+                      		  state <= A;
+                    		end if;
 			when others=>
-				internal_state<="111";
+				state<=H;
 		end case;
 	end if;
-end process proximo_estado;
-
-
+   end process;
 end arquitectura;

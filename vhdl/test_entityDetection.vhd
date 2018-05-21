@@ -4,34 +4,46 @@ use ieee.std_logic_1164.all;
 entity test_entityDetection is
 end entity;
 
-architecture dataFlow of test_entityDetection is
- signal charInput : std_logic_vector(7 downto 0);
- signal Y : std_logic;
- signal state : std_logic_vector(2 downto 0);
- signal reset: std_logic;
- signal clk: std_logic;
- constant ClockFrequency : integer := 100e6; -- 100 MHz
- constant ClockPeriod    : time    := 1000 ms / ClockFrequency;
+architecture behavior of test_entityDetection is
+     signal clk,reset,detectedBit : std_logic := '0';
+     signal bitInput : std_logic_vector(7 downto 0) := x"00";
+     constant clk_period : time := 10 ns;
+     component entityDetection is
+     port (
+      clk: in std_logic;
+      reset : in std_logic;
+      bitInput : in std_logic_vector(7 downto 0);
+      detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+    ) ;
+  end component;
 
-    component entityDetection
-    port (   charInput : in std_logic_vector(7 downto 0);
-   		 Y: out std_logic;
-    		state: out std_logic_vector(2 downto 0);
-    		reset: in std_logic;
-    		clk: in std_logic
-  ) ;
+BEGIN
+ detector: entityDetection port map (clk,reset,bitInput,detectedBit);
 
-    end component;
+clk_process :process
+   begin
+        clk <= '0';
+        wait for clk_period/2;
+        clk <= '1';
+        wait for clk_period/2;
+   end process;
+   
 
-begin
-ed1: entityDetection port map(charInput,Y,state,reset,clk);
+   stim_proc: process
+   begin       
+      bitInput <= x"65";             --e
+      wait for clk_period;
+      bitInput <= x"6E";             --n
+      wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"69";             --i
+      wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"79";             --y
+      wait for clk_period;
+      wait;        
+   end process;
 
-	clk <= not clk after ClockPeriod / 2;
-	reset <= '0' after 0 ns;
-	charInput <= "01100101" after 10 ns , "01101110" after 20 ns ,
-             "01110100" after 30 ns ,"01101001" after 40 ns ,
-	     "01110100" after 50 ns ,"01111001" after 60 ns ;
- 	reset <= '1' after 70 ns;
-	
-
-end dataFlow ;
+END;
