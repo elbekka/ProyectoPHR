@@ -4,8 +4,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity caracteres_Detector  is 
 port (
     bitInput : in std_logic_vector(7 downto 0);
-    detectedBit : out std_logic; -- '1' si ha detectado la secuencia.
-    espacioDetected : out std_logic
+    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
   ) ;
 end caracteres_Detector;
 
@@ -20,9 +19,8 @@ architecture Behavioral of caracteres_Detector is
      
       signal k0,k1,k2,k3,k4,k5,k6,k7,k8,k9,
 	     k10,k11,k12,k13,k14,k15,k16,k17,k18,k19,
-	     k20,k21,k22,k23,k24,k25,k26: std_logic;
+	     k20,k21,k22,k23,k24,k25: std_logic;
 begin 
-	i0: memCompare port map (bitInput,0,isCorrect=>k0);
  i1: memCompare port map (bitInput,0,k0);
  i2: memCompare port map (bitInput,1,k1);
  i3: memCompare port map (bitInput,2,k2);
@@ -49,7 +47,6 @@ i23: memCompare port map (bitInput,22,k22);
 i24: memCompare port map (bitInput,23,k23);
 i25: memCompare port map (bitInput,24,k24);
 i26: memCompare port map (bitInput,25,k25);
-i27: memCompare port map (bitInput,26,espacioDetected=>k26)
 operacion: detectedBit<=k0 or k1 or k2 or k3 or k4 or k5 or 
 			k6 or k7 or k8 or k9 or k10 or k11 or 
 			k12 or k13  or k14 or k15 or k16 or

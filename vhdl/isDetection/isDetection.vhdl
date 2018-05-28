@@ -3,6 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity is_Detector is
   port (
+      reset : in std_logic;
     clk: in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
     detectedBit : out std_logic -- '1' si ha detectado la secuencia.
@@ -13,12 +14,11 @@ architecture Behavioral of is_Detector is
 type state_type is (A,B);
     signal state : state_type := A ;
     signal auxBit1,auxBit : std_logic;
-    signal reset : std_logic := '0';
     
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
-          address   : in integer range 0 to 25 ;
+          address   : in integer range 0 to 30 ;
           isCorrect : out std_logic
         ) ;
       end component;

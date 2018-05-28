@@ -18,7 +18,7 @@ type state_type is (A,B,C,D);
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
-          address   : in integer range 0 to 25 ;
+          address   : in integer range 0 to 30 ;
           isCorrect : out std_logic
         ) ;
       end component;

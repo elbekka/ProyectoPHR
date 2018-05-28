@@ -1,0 +1,16 @@
+v 4
+file . "test/testInOut/testInOut.vhdl" "fdcfc9ca68a3dfcb1e16a0979960aeac470976b3" "20180528094900.738":
+  entity tb_inoutdetector at 1( 0) + 0 on 43;
+  architecture behavior of tb_inoutdetector at 7( 94) + 0 on 44;
+file . "vhdl/moduloMemoria/StaticMem.vhd" "48ecb8f931a43b65677224b19259e381b427af3e" "20180528093531.385":
+  entity rom24x8 at 1( 0) + 0 on 29;
+  architecture sevenseg of rom24x8 at 9( 164) + 0 on 30;
+file . "vhdl/moduloMemoria/Comparador8bits.vhdl" "a2875ed7b3e54591b61ae83e531517a32c4f0325" "20180528093531.311":
+  entity comp8bits at 1( 0) + 0 on 25;
+  architecture dataflow of comp8bits at 12( 227) + 0 on 26;
+file . "vhdl/moduloMemoria/staticMemCompare.vhdl" "29663053dab4ec12e4e214203510e631db42adb4" "20180528093531.357":
+  entity memcompare at 1( 0) + 0 on 27;
+  architecture arquitectura of memcompare at 12( 219) + 0 on 28;
+file . "vhdl/inOutDetector/InOut.vhd" "c493702da1b826908bae2ac2cf25e21b50cfa551" "20180528094858.243":
+  entity inoutdetection at 1( 0) + 0 on 41;
+  architecture arquitectura of inoutdetection at 25( 299) + 0 on 42;

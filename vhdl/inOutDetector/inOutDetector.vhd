@@ -18,12 +18,12 @@ type state_type is (A,B,C,D);
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
-          address   : in integer range 0 to 25 ;
+          address   : in integer range 0 to 30 ;
           isCorrect : out std_logic
         ) ;
       end component;
 begin
-    memCompare1: memCompare port map (bitInput,8,isCorrect=>auxBit);
+    memCompare1: memCompare port map (bitInput,8,isCorrect=>auxBit); -- I
     memCompare2: memCompare port map (bitInput,13,isCorrect=>auxBit1);
     memCompare4: memCompare port map (bitInput,20,isCorrect=>auxBit2);
     memCompare5: memCompare port map (bitInput,19,isCorrect=>auxBit3);
