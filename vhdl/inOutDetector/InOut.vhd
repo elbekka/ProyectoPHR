@@ -29,7 +29,7 @@ architecture arquitectura of InOutDetection is
 	signal auxCorrect0,auxCorrect1,auxCorrect2,auxCorrect3,auxCorrect4,auxCorrect5:std_logic;
 	signal interrupcion : std_logic :='0';
 
-    type state_type is (I,N,O,U,T,TRAMPA);
+    type state_type is (I,N,O,U,T);
 
     signal state : state_type := I ;
 
@@ -74,8 +74,7 @@ process (clk)
 
     begin
 
-	if(reset='1' or interrupcion ='1') then
-
+	if(reset='0' or interrupcion ='1') then
 		detectedBit <='0' ;
         state <= I;
 	elsif(rising_edge(clk)) then

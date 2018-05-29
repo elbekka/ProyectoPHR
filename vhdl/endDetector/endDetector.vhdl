@@ -11,48 +11,55 @@ entity end_Detector is
 end end_Detector;
 
 architecture Behavioral of end_Detector is
-type state_type is (A,B,C);
-    signal state : state_type := A ;
-    signal auxBit2,auxBit1,auxBit : std_logic;
+type state_type is (E,N,D,space);
+    signal state : state_type := E ;
+    signal charE,charN,charD,charSpace,interrupcion : std_logic:='0';
     
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
-          address   : in integer range 0 to 25 ;
+          address   : in integer range 0 to 30 ;
           isCorrect : out std_logic
         ) ;
       end component;
 begin
-    memCompare1: memCompare port map (bitInput,4,isCorrect=>auxBit);
-    memCompare2: memCompare port map (bitInput,13,isCorrect=>auxBit1);
-    memCompare3: memCompare port map (bitInput,3,isCorrect=>auxBit2);
+    memCompareE: memCompare port map (bitInput,4,isCorrect=>charE);
+    memCompareN: memCompare port map (bitInput,13,isCorrect=>charN);
+    memCompareD: memCompare port map (bitInput,3,isCorrect=>charD);
+    memCompareSpace : memCompare port map(bitInput,26,isCorrect=>charSpace);
     process (clk)
     begin   
-        if(reset = '1') then 
+        if(reset = '1' or interrupcion='1') then 
         detectedBit <='0' ;
-        state <= A;
+        state <= E;
+        interrupcion <= '0';
         elsif(rising_edge(clk)) then
             case state is
-                when A =>
+                when E =>
                 detectedBit <='0' ;
-                if(auxBit = '1') then
-                    state <=B;
+                if(charE = '1') then
+                    state <=N;
                 else
-                    state <=A;
+                    interrupcion<='1';
                 end if;
-                when B =>
-                if(auxBit1 = '1') then
-                        state <=C ;
+                when N =>
+                if(charN = '1') then
+                        state <=D ;
                     else
-                        state <= A;
+                        interrupcion <= '1';
                     end if; 
-                when C =>
-                if(auxBit2 = '1') then
-                    detectedBit <='1' ;
-                    state <=A;
+                when D =>
+                if(charD = '1') then
+                    state <=space;
                 else
-                    state <=A;
+                    interrupcion<='1';
                 end if;
+                when space =>
+                if(charSpace = '1')then
+                    detectedBit<='1';
+                else
+                    interrupcion<='1';
+                    end if;
                 when others => NULL;
             end case;
         end if;
