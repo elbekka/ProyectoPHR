@@ -133,6 +133,9 @@ begin
 
                 when CIERROPAR =>
                 if(auxBit7 = '1') then state <=PUNTOCOMA ;
+                else if(auxbit8 = '1') then state <=PALABRA;
+                     else interruption <= '1';
+                     end if;
                 else interruption <= '1';
                 end if;
 
