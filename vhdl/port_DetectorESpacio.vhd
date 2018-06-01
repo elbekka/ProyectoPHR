@@ -37,7 +37,7 @@ comp4 : memCompare port map (bitInput,19,isCorrect=>auxCorrect3); --T
 comp5 : memCompare port map (bitInput,26, isCorrect=>auxCorrect4);--(BLANCO)
 process (clk)
     begin
-	if(reset='0' or interrupcion='1') then
+	if(reset='1' or interrupcion='1') then
 		detectedBit <='0' ;
         	--state <= P;
 	elsif(rising_edge(clk)) then
