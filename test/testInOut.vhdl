@@ -20,15 +20,7 @@ ARCHITECTURE behavior OF tb_InOutDetector IS
 
 BEGIN
  detector: InOutDetection port map (clk,reset,bitInput,detectedBit);
-    -- Instantiate the Unit Under Test (UUT)
-   --uut: is_Detector PORT MAP (
-     --     clk => clk,
-       --   reset => reset,
-         -- bitInput => bitInput,
-          --detectedBit => detectedBit
-        --);
-
-   -- Clock process definitions
+   
    clk_process :process
    begin
         clk <= '0';
@@ -40,14 +32,22 @@ BEGIN
    -- Stimulus process : Apply the bits in the sequence one by one.
    stim_proc: process
    begin       
-      bitInput<=x"69";
-      wait for clk_period;
-      bitInput <= x"6E";             --o
-      wait for clk_period;
-      bitInput<=x"69";
-      wait for clk_period;
-      bitInput <= x"6E";             --o
-      wait for clk_period;
+   bitInput <= x"6F";             --1
+   wait for clk_period;
+   bitInput <= x"75";             --11
+   wait for clk_period;
+   bitInput <= x"74";             --11
+   wait for clk_period;
+   bitInput <= x"74";
+   wait for clk_period;
+   bitInput <= x"6F";             --1
+   wait for clk_period;
+   bitInput <= x"75";             --11
+   wait for clk_period;
+   bitInput <= x"74";             --11
+   wait for clk_period;
+   bitInput <= x"20";
+   wait for clk_period;
       wait;        
    end process;
 

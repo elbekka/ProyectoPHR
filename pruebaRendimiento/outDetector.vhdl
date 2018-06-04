@@ -10,14 +10,14 @@ entity OutDetection is
   ) ;
 end entity;
 
-architecture arquitectura of InOutDetection is
+architecture arquitectura of OutDetection is
 
-	signal charO,charU,charT:std_logic;
+	signal charO,charU,charT,charSpace:std_logic;
 	signal interrupcion : std_logic :='0';
 
-    type state_type is (O,U,T);
+    type state_type is (O,U,T,Space);
 
-    signal state : state_type := I ;
+    signal state : state_type := O ;
 
     component memCompare
     port (
@@ -27,31 +27,37 @@ architecture arquitectura of InOutDetection is
   ) ;
     end component;
 begin
-    
-    comp3 : memCompare port map (bitInput,14,isCorrect=>charO); --0
-    comp4 : memCompare port map (bitInput,20,isCorrect=>charU); --U
-    comp5 : memCompare port map (bitInput,19,isCorrect=>charT); --T
+    compO : memCompare port map (bitInput,14,isCorrect=>charO); --0
+    compU : memCompare port map (bitInput,20,isCorrect=>charU); --U
+    compT : memCompare port map (bitInput,19,isCorrect=>charT); --T
+    compSpace : memCompare port map (bitInput,26,charSpace);    --Space
     process( clk )
     begin
-        if(reset='0' or interrupcion ='1') then
+        if(reset='1' or interrupcion ='1') then
             detectedBit <='0' ;
-            state <= I;
+            interrupcion <= '0';
+            state <= O;
         elsif(rising_edge(clk)) then
             detectedBit<='0';
             case state is
-                when I =>
-                if(charI = '1') then
-                    state <=N;
-                else
-                    interrupcion <='1';
+                when O =>
+                if(charO = '1') then
+                    state <=U;
                 end if;
-                when N =>
-                if(charN = '1')then
-                    detectedBit<='1';
-                else
-                    interrupcion <= '1';
+                when U =>
+                if(charU = '1')then
+                    state<=space;
                 end if;
-                when others => null;
+                when T =>
+                if(charT = '1')then
+                    state <= Space;
+                end if;
+                when Space =>
+                if(charSpace = '1')then
+                    detectedBit <='1';
+                    state <=O;
+                end if;
+                when others => interrupcion <= '1';
             end case;
         end if;
     end process ; -- identifier

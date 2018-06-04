@@ -10,12 +10,12 @@ entity InDetection is
   ) ;
 end entity;
 
-architecture arquitectura of InOutDetection is
+architecture arquitectura of InDetection is
 
-	signal charI,charN:std_logic;
+	signal charI,charN,charSpace:std_logic;
 	signal interrupcion : std_logic :='0';
 
-    type state_type is (I,N);
+    type state_type is (I,N,space);
 
     signal state : state_type := I ;
 
@@ -28,13 +28,15 @@ architecture arquitectura of InOutDetection is
     end component;
 begin
     
-comp1 : memCompare port map (bitInput,8,isCorrect=>charI); --I
-comp2 : memCompare port map (bitInput,13,isCorrect=>charN);--N
+compI : memCompare port map (bitInput,8,isCorrect=>charI); --I
+compN : memCompare port map (bitInput,13,isCorrect=>charN);--N
+compSpace : memCompare port map (bitInput,26,charSpace);
     process( clk )
     begin
-        if(reset='0' or interrupcion ='1') then
+        if(reset='1' or interrupcion ='1') then
             detectedBit <='0' ;
             state <= I;
+            interrupcion <='0';
         elsif(rising_edge(clk)) then
             detectedBit<='0';
             case state is
@@ -46,10 +48,15 @@ comp2 : memCompare port map (bitInput,13,isCorrect=>charN);--N
                 end if;
                 when N =>
                 if(charN = '1')then
-                    detectedBit<='1';
+                    state <= space;
                 else
                     interrupcion <= '1';
                 end if;
+                when space =>
+                if(charSpace = '1')then
+                    detectedBit <= '1';
+                    state <= I;
+                end if ;
                 when others => null;
             end case;
         end if;
