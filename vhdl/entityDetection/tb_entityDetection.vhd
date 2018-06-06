@@ -46,6 +46,41 @@ BEGIN
       wait for clk_period;
       bitInput <= x"20";            --space
       wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"79";             --y
+      wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"79";             --y
+      wait for clk_period;
+      bitInput <= x"65";             --e
+      wait for clk_period;
+      bitInput <= x"6E";             --n
+      wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"69";             --i
+      wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"79";             --y
+      wait for clk_period;
+      bitInput <= x"20";            --space
+      wait for clk_period;
+      bitInput <= x"65";             --e
+      wait for clk_period;
+      bitInput <= x"6E";             --n
+      wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"69";             --i
+      wait for clk_period;
+      bitInput <= x"74";             --t
+      wait for clk_period;
+      bitInput <= x"79";             --y
+      wait for clk_period;
+      bitInput <= x"20";            --space
       wait;                
    end process;
 

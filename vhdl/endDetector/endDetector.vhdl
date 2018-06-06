@@ -11,7 +11,7 @@ entity end_Detector is
 end end_Detector;
 
 architecture Behavioral of end_Detector is
-type estado is (E,N,D,space);
+type estado is (E,N,D,space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charE,charN,charD,charSpace,estadoAnt: std_logic:='0';
     component memCompare is
@@ -46,19 +46,19 @@ begin
         else
         detectedBit<='0';
         estadoAnt <='0';
-        estado_sig <=E;
+        estado_sig <=trampa;
         end if;
         when N =>
         if(charN = '1') then
                 estado_sig<=D ;
         else
-                estado_sig <=E;
+                estado_sig <=trampa;
         end if; 
         when D =>
         if(charD = '1') then
             estado_sig <=space;
         else
-            estado_sig <=E;
+            estado_sig <=trampa;
         end if;
         when space =>
         if(charSpace = '1')then
@@ -66,10 +66,19 @@ begin
             estadoAnt<='1';
             estado_sig<=E;
         else
-            estado_sig<=E;
+            estado_sig<=trampa;
             estadoAnt<= '0';
             end if;
-        when others => estadoAnt <='0';
+        when trampa =>
+        if(charSpace = '1')then
+            estado_sig<= E;
+        else
+            estado_sig <=trampa;
+            detectedBit<='0';
+        end if;
+        when others => 
+            estadoAnt <='0';
+            estado_sig<=trampa;  --ocurrido un error;
     end case;
      end process;
 end Behavioral ; -- Behavioral
