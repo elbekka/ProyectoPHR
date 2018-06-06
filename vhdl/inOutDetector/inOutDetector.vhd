@@ -11,59 +11,88 @@ entity inOut_Detector is
 end inOut_Detector;
 
 architecture Behavioral of inOut_Detector is
-type state_type is (A,B,C,D);
-    signal state : state_type := A ;
-    signal auxBit3,auxBit2,auxBit1,auxBit : std_logic;
-    
+type estado is (I,N,U,T,space);
+    signal estado_ini,estado_sig: estado ;
+    signal charI,charN,charO,charU,charT,charSpace,estadoAnt: std_logic:='0';
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
-          address   : in integer range 0 to 25 ;
+          address   : in integer range 0 to 30 ;
           isCorrect : out std_logic
         ) ;
       end component;
 begin
-    memCompare1: memCompare port map (bitInput,8,isCorrect=>auxBit);
-    memCompare2: memCompare port map (bitInput,13,isCorrect=>auxBit1);
-    memCompare4: memCompare port map (bitInput,20,isCorrect=>auxBit2);
-    memCompare5: memCompare port map (bitInput,19,isCorrect=>auxBit3);
+    memCompareI: memCompare port map (bitInput,8,isCorrect=>charI);
+    memCompareN: memCompare port map (bitInput,13,isCorrect=>charN);
+memCompareO: memCompare port map (bitInput,14,isCorrect=>charO);
+	memCompareU: memCompare port map (bitInput,20,isCorrect=>charU);
+    memCompareT: memCompare port map (bitInput,19,isCorrect=>charT);
+	memCompareSpace : memCompare port map(bitInput,26,isCorrect=>charSpace);
+	
 
-    process (clk)
+    process (clk , reset)
     begin   
         if(reset = '1') then 
-        detectedBit <='0' ;
-        state <= A;
+        estado_ini <= I;
         elsif(rising_edge(clk)) then
-            case state is
-                when A =>
-                detectedBit <='0';
-                if(auxBit = '1') then
-                    state <=B;
-                else
-                    state <=C;
-                end if;
-                when B =>
-                if(auxBit1 = '1') then
-                    detectedBit <='1' ;
-                    state <=A;
-                else
-                    state <=A;
-                end if;
-                when C =>
-                if(auxBit2 = '1') then
-                        state <=D ;
-                    else
-                        state <= A;
-                end if; 
-                when D=>
-                if(auxBit3 = '1') then
-                    detectedBit <='1' ;
-                    state <=A ;
-                else
-                    state <= A;
-                end if;
-                when others => NULL;
-            end case;
+            estado_ini<=estado_sig;
         end if;
+	 end process;
+	 
+
+     process (charI,charN,charO,charU,charT,charSpace,estado_ini)
+     begin
+	  case estado_ini is
+---------------------------------------------------------------------------------------------------
+        when I =>
+        if(charI = '1') then
+            detectedBit<='0';
+	    estado_sig <=N;
+	    elsif(charO = '1') then 
+			detectedBit<='0';
+			estado_sig <=U;
+        		elsif(estadoAnt = '1' and charSpace ='1') then 	
+				detectedBit<='1';
+        else
+            detectedBit<='0';
+            estadoAnt <='0';
+            estado_sig <=I;
+	end if;
+---------------------------------------------------------------------------------------------
+        when N =>
+        if(charN = '1') then
+                estado_sig<=space ;
+        else
+                estado_sig <=I;
+	end if; 
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------
+		when U =>
+        if(charU = '1') then
+			estado_sig<=T ;
+		else
+			estado_sig <=I;
+		end if;
+--------------------------------------------------------------------------------------------
+		when T =>
+        if(charT = '1') then
+			estado_sig<=space ;
+		else
+			estado_sig <=I;
+		end if;
+---------------------------------------------------------------------------------------
+        when space =>
+        if(charSpace = '1')then
+            detectedBit<='1';
+            estadoAnt<='1';
+            estado_sig<=I;
+        else
+            estado_sig<=I;
+            estadoAnt<= '0';
+            end if;
+-----------------------------------------------------------------------------------------
+        when others => estadoAnt <='0';
+    end case;
      end process;
-end Behavioral ; -- Behavioral
+end Behavioral ; -- Behavioral	
