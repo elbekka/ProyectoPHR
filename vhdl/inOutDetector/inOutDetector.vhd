@@ -11,7 +11,7 @@ entity inOut_Detector is
 end inOut_Detector;
 
 architecture Behavioral of inOut_Detector is
-type estado is (I,N,U,T,space);
+type estado is (I,N,U,T,space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charI,charN,charO,charU,charT,charSpace,estadoAnt: std_logic:='0';
     component memCompare is
@@ -56,14 +56,14 @@ memCompareO: memCompare port map (bitInput,14,isCorrect=>charO);
         else
             detectedBit<='0';
             estadoAnt <='0';
-            estado_sig <=I;
+            estado_sig <=trampa;
 	end if;
 ---------------------------------------------------------------------------------------------
         when N =>
         if(charN = '1') then
                 estado_sig<=space ;
         else
-                estado_sig <=I;
+                estado_sig <=trampa;
 	end if; 
 ----------------------------------------------------------------------------------------------------
 
@@ -72,15 +72,23 @@ memCompareO: memCompare port map (bitInput,14,isCorrect=>charO);
         if(charU = '1') then
 			estado_sig<=T ;
 		else
-			estado_sig <=I;
+			estado_sig <=trampa;
 		end if;
 --------------------------------------------------------------------------------------------
 		when T =>
         if(charT = '1') then
 			estado_sig<=space ;
 		else
-			estado_sig <=I;
+			estado_sig <=trampa;
 		end if;
+-----------------------------------------------------------------------------------------------------
+		when trampa =>
+        if(charSpace = '1')then
+            estado_sig<= I;
+        else
+            estado_sig <=trampa;
+            detectedBit<='0';
+        end if;
 ---------------------------------------------------------------------------------------
         when space =>
         if(charSpace = '1')then
@@ -88,11 +96,13 @@ memCompareO: memCompare port map (bitInput,14,isCorrect=>charO);
             estadoAnt<='1';
             estado_sig<=I;
         else
-            estado_sig<=I;
+            estado_sig<=trampa;
             estadoAnt<= '0';
             end if;
 -----------------------------------------------------------------------------------------
-        when others => estadoAnt <='0';
+		when others => 
+			estadoAnt <='0';
+			estado_sig<=trampa;
     end case;
      end process;
 end Behavioral ; -- Behavioral	
