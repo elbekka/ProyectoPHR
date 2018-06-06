@@ -1,4 +1,0 @@
-v 4
-file . "InOut.vhd" "53fde73498eba6c3917a98675ab9bf850283a8f5" "20180528091709.121":
-  entity entitydetection at 1( 0) + 0 on 11;
-  architecture arquitectura of entitydetection at 25( 300) + 0 on 12;
