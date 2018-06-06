@@ -28,7 +28,7 @@ begin
     process (clk , reset)
     begin   
         if(reset = '1' ) then 
-        estado_ini <= E;
+        estado_ini <= I;
         elsif(rising_edge(clk)) then
             estado_ini<=estado_sig;
         end if;
@@ -37,7 +37,7 @@ begin
      begin
         
       case estado_ini is
-        when E =>
+        when I =>
         if(charI = '1') then
             detectedBit<='0';
             estado_sig <=S;
@@ -58,7 +58,7 @@ begin
         if(charSpace = '1')then
             detectedBit<='1';
             estadoAnt<='1';
-            estado_sig<=E;
+            estado_sig<=I;
         else
             estado_sig<=trampa;
             estadoAnt<= '0';
