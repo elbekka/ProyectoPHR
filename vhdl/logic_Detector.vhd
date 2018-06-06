@@ -11,9 +11,9 @@ entity logic_Detector is
 end logic_Detector;
 
 architecture Behavioral of logic_Detector is
-type estado is (A,N,D,space);
+type estado is (A,N,D,O,R,X,O1,R1,N1,A1,N3,space);
     signal estado_ini,estado_sig: estado ;
-    signal charA,charN,charD,charSpace,estadoAnt: std_logic:='0';
+    signal charA,charN,charD,charO,charR,charX,charSpace,estadoAnt: std_logic:='0';
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
@@ -25,9 +25,9 @@ begin
     memCompareA: memCompare port map (bitInput,0,isCorrect=>charA);
     memCompareN: memCompare port map (bitInput,13,isCorrect=>charN);
     memCompareD: memCompare port map (bitInput,3,isCorrect=>charD);
-   -- memCompareO: memCompare port map (bitInput,14,isCorrect=>charO);
- --   memCompareR: memCompare port map (bitInput,17,isCorrect=>charR);
- --   memCompareX: memCompare port map (bitInput,23,isCorrect=>charX);
+    memCompareO: memCompare port map (bitInput,14,isCorrect=>charO);
+    memCompareR: memCompare port map (bitInput,17,isCorrect=>charR);
+    memCompareX: memCompare port map (bitInput,23,isCorrect=>charX);
     memCompareSpace : memCompare port map(bitInput,26,isCorrect=>charSpace);
     process (clk , reset)
     begin   
@@ -37,15 +37,22 @@ begin
             estado_ini<=estado_sig;
         end if;
      end process;
-     process (charA,charN,charD,charSpace,estado_ini)
+     process (charA,charN,charD,charO,charR,charX,charSpace,estado_ini)
      begin
       case estado_ini is
-----------------------------------------------
-when A =>
+        when A =>
         if(charA = '1') then
             	detectedBit<='0';
             	estado_sig <=N;
-	
+	elsif(charO = '1')then
+		detectedBit<='0';
+		estado_sig <=R;
+	elsif(charX = '1')then
+		detectedBit<='0';
+		estado_sig <=O1;
+	elsif(charN = '1')then
+		detectedBit<='0';
+		estado_sig <=A1;
         elsif(estadoAnt = '1' and charSpace ='1') then 
             detectedBit<='1';
         else
@@ -54,21 +61,80 @@ when A =>
         estado_sig <=A;
         end if;
 ------------------------------------------
-when N =>
+        when N =>
         if(charN = '1') then
                 estado_sig<=D ;
         else
                 estado_sig <=A;
         end if;
 ------------------------------------------- 
- when D =>
+        when D =>
         if(charD = '1') then
             estado_sig <=space;
         else
             estado_sig <=A;
         end if;
 --------------------------------------
-
+	when O =>
+        if(charO = '1') then
+            estado_sig <=R;
+        else
+            estado_sig <=A;
+        end if;
+--------------------------------------------
+	when R =>
+        if(charR = '1') then
+            estado_sig <=space;
+        else
+            estado_sig <=A;
+        end if;
+-------------------------------------------------------
+	when X =>
+        if(charX = '1') then
+            estado_sig <=O1;
+        else
+            estado_sig <=A;
+        end if;
+-----------------------------------
+when O1 =>
+        if(charO = '1') then
+            estado_sig <=R1;
+	elsif(charN = '1')then
+	    estado_sig <=O;
+        else
+            estado_sig <=A;
+        end if;
+--------------------------
+when R1 =>
+        if(charR = '1') then
+            estado_sig <=space;
+        else
+            estado_sig <=A;
+        end if;
+----------------------------
+when N1 =>
+        if(charN = '1') then
+            estado_sig <=A1;
+        else
+            estado_sig <=A;
+        end if;
+-------------------------------
+when A1 =>
+        if(charA = '1') then
+            estado_sig <=N3;
+        else
+            estado_sig <=A;
+        end if;
+-------------------------------
+when N3 =>
+        if(charN = '1') then
+            estado_sig <=D;
+	elsif(charO = '1')then
+	    estado_sig <=O;
+        else
+            estado_sig <=A;
+        end if;
+-----------------------------
         when space =>
         if(charSpace = '1')then
             detectedBit<='1';
