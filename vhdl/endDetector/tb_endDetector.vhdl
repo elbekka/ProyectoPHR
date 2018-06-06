@@ -31,7 +31,29 @@ BEGIN
    -- Stimulus process : Apply the bits in the sequence one by one.
    stim_proc: process
    begin       
-   bitInput <= x"20";            
+   bitInput <= x"65";            
+   wait for clk_period;
+   bitInput <= x"6e";             
+   wait for clk_period;
+   bitInput <= x"64";             
+   wait for clk_period;
+   bitInput <= x"20";
+   wait for clk_period;
+   bitInput <= x"6e";            
+   wait for clk_period;
+   bitInput <= x"65";            
+   wait for clk_period;
+   bitInput <= x"6e";             
+   wait for clk_period;
+   bitInput <= x"64";             
+   wait for clk_period;
+   bitInput <= x"20";
+   wait for clk_period;
+   bitInput <= x"7A";             
+   wait for clk_period;
+   bitInput <= x"6e";             
+   wait for clk_period;
+   bitInput <= x"65";            
    wait for clk_period;
    bitInput <= x"6e";             
    wait for clk_period;
@@ -47,12 +69,7 @@ BEGIN
    wait for clk_period;
    bitInput <= x"20";
    wait for clk_period;
-   bitInput <= x"20";             
-   wait for clk_period;
-   bitInput <= x"20";
-   wait for clk_period;
-   bitInput <= x"40";
-   wait for clk_period;
+   
       wait;                
    end process;
 

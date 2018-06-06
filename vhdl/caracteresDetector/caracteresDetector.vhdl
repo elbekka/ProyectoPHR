@@ -11,10 +11,10 @@ entity CharDetector is
 end CharDetector;
 
 architecture Behavioral of CharDetector is
-type state_type is (C,espacio);
-    signal state : state_type := A ;
-    signal auxBit,auxBit1: std_logic;
-    component caracteres_Detector  is 
+type estado is (C,espacio);
+    signal estado_ini,estado_sig: estado ;
+    signal charCaracter,charSpace: std_logic;
+    component esCaracter  is 
     port (
     bitInput : in std_logic_vector(7 downto 0);
     detectedBit : out std_logic -- '1' si ha detectado la secuencia.
@@ -29,28 +29,48 @@ type state_type is (C,espacio);
   end component;
 
 begin
-    charDec:  caracteres_Detector port map (bitInput,isCorrect=>auxBit); -- I
-    espacio: memCompare port map (bitInput,26,isCorrect=>auxBit1);
-    process (clk)
+    charDec:  caracteres_Detector port map (bitInput,isCorrect=>charCaracter); -- I
+    espacio: memCompare port map (bitInput,26,isCorrect=>charSpace);
+    process (clk , reset)
     begin   
-        if(reset = '1') then 
-        detectedBit <='0' ;
-        state <= C;
+        if(reset = '1' ) then 
+        estado_ini <= E;
         elsif(rising_edge(clk)) then
-            case state is
-                when C =>
-                detectedBit <='0';
-                if(auxBit = '1') then
-                    state <=C;
-                else
-                    state <=espacio;
-                end if;
-                when espacio =>
-                if(auxBit1 = '1') then 
-                    detectedBit <= '1';
-                end if;
-                when others => NULL;
-            end case;
+            estado_ini<=estado_sig;
         end if;
+     end process;
+     process (charCaracter,charSpace,estado_ini)
+     begin
+      case estado_ini is
+        when C =>
+        if(charCaracter = '1') then
+            detectedBit<='0';
+            estado_sig <=charCaracter;
+        elsif(estadoAnt = '1' and charSpace ='1') then 
+            detectedBit<='1';
+        else
+        detectedBit<='0';
+        estadoAnt <='0';
+        estado_sig <=trampa;
+        end if;
+        when space =>
+        if(charSpace = '1')then
+            detectedBit<='1';
+            estadoAnt<='1';
+            estado_sig<=E;
+        else
+            estado_sig<=trampa;
+            estadoAnt<= '0';
+            end if;
+        when trampa =>
+        if(charSpace = '1')then
+            estado_sig<= C;
+        else
+            estado_sig <=trampa;
+        end if;
+        when others => 
+            estadoAnt <='0';
+            estado_sig<=trampa;  --ocurrido un error;
+    end case;
      end process;
 end Behavioral ; -- Behavioral
