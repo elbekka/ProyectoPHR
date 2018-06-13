@@ -6,7 +6,8 @@ entity entityDetection is
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
-    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+    detectedBit : out std_logic; -- '1' si ha detectado la secuencia.
+    numErrores : out integer
   ) ;
 end entity;
 
@@ -15,6 +16,7 @@ architecture arquitectura of entityDetection is
     signal estado_ini,estado_sig: estado ;
     signal charE,charN,charT,charI,charY,charSpace,estadoAnt: std_logic:='0';
     signal estadoTrampa : std_logic:= '0' ;
+    signal err : integer := 0;
     component memCompare
     port (
     charInput : in std_logic_vector(7 downto 0);
@@ -99,6 +101,8 @@ begin
     else
         estado_sig <=trampa;
         detectedBit<='0';
+        err <= err +1 ;
+        numErrores <= err;
     end if;
     when others => 
         estadoAnt <='0';

@@ -14,7 +14,8 @@ ARCHITECTURE behavior OF tb_entityDetection IS
       clk: in std_logic;
       reset : in std_logic;
       bitInput : in std_logic_vector(7 downto 0);
-      detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+      detectedBit : out std_logic; -- '1' si ha detectado la secuencia.
+      numErrores : out integer
     ) ;
   end component;
 
