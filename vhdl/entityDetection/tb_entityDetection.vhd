@@ -7,10 +7,12 @@ END tb_entityDetection;
 ARCHITECTURE behavior OF tb_entityDetection IS
 
    signal clk,detectedBit,reset : std_logic := '0';
+   signal numErrores,ErrInic : integer :=0;
    signal bitInput : std_logic_vector(7 downto 0) := x"00";
    constant clk_period : time := 10 ns;
    component entityDetection is
     port (
+      ErrInic  : in integer :=0;
       clk: in std_logic;
       reset : in std_logic;
       bitInput : in std_logic_vector(7 downto 0);
@@ -20,7 +22,7 @@ ARCHITECTURE behavior OF tb_entityDetection IS
   end component;
 
 BEGIN
- detector: entityDetection port map (clk,reset,bitInput,detectedBit);
+ detector: entityDetection port map (ErrInic,clk,reset,bitInput,detectedBit,numErrores);
    clk_process :process
    begin
         clk <= '0';
@@ -82,7 +84,12 @@ BEGIN
       bitInput <= x"79";             --y
       wait for clk_period;
       bitInput <= x"20";            --space
-      wait;                
+      wait for clk_period;
+      bitInput <= x"79";             --y
+      wait for clk_period;
+      bitInput <= x"20";            --space
+      wait for clk_period;
+      wait;              
    end process;
 
 END;

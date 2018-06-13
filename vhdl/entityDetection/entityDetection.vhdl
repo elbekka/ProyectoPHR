@@ -3,11 +3,13 @@ use ieee.std_logic_1164.all;
 
 entity entityDetection is
   port (
+   
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
+    ErrInic  : in integer :=0;
     detectedBit : out std_logic; -- '1' si ha detectado la secuencia.
-    numErrores : out integer
+    numErrores : out integer:=0
   ) ;
 end entity;
 
@@ -15,8 +17,8 @@ architecture arquitectura of entityDetection is
  type estado is (E,N,T1,I,T2,Y, space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charE,charN,charT,charI,charY,charSpace,estadoAnt: std_logic:='0';
-    signal estadoTrampa : std_logic:= '0' ;
     signal err : integer := 0;
+
     component memCompare
     port (
     charInput : in std_logic_vector(7 downto 0);
@@ -27,13 +29,13 @@ architecture arquitectura of entityDetection is
 
 begin
 --LLAMADAS A LAS ENTIDADES
-
 memCompareE : memCompare port map (bitInput,4,isCorrect=>charE);
 memCompareN : memCompare port map (bitInput,13,isCorrect=>charN);
 memCompareT : memCompare port map (bitInput,19,isCorrect=>charT);
 memCompareI : memCompare port map (bitInput,8,isCorrect=>charI);
 memCompareY : memCompare port map (bitInput,24,isCorrect=>charY);
 memCompareSpace : memCompare port map(bitInput,26,isCorrect=>charSpace);
+
 process (clk , reset)
 begin   
     if(reset = '1') then 
@@ -97,12 +99,15 @@ begin
         end if;
     when trampa =>
     if(charSpace = '1')then
+        if(err< ErrInic)then
+                err <= ErrInic;
+        end if;
+        numErrores <= err + 1 ;
+        err <=err +1 ;
         estado_sig<= E;
     else
         estado_sig <=trampa;
         detectedBit<='0';
-        err <= err +1 ;
-        numErrores <= err;
     end if;
     when others => 
         estadoAnt <='0';

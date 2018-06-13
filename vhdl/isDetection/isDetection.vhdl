@@ -6,7 +6,9 @@ entity is_Detection is
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
-    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+    ErrInic  : in integer :=0;
+    detectedBit : out std_logic;
+    numErrores : out integer:=0 -- '1' si ha detectado la secuencia.
   ) ;
 end is_Detection;
 
@@ -14,6 +16,7 @@ architecture Behavioral of is_Detection is
 type estado is (I,S,space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charI,charS,charSpace,estadoAnt: std_logic:='0';
+    signal err : integer := 0;
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
@@ -65,6 +68,11 @@ begin
             end if;
         when trampa =>
         if(charSpace = '1')then
+            if(err< ErrInic)then
+                err <= ErrInic;
+        end if;
+            numErrores <= err + 1 ;
+            err <=err +1 ;
             estado_sig<= I;
         else
             estado_sig <=trampa;

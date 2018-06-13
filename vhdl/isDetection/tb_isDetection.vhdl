@@ -8,18 +8,21 @@ ARCHITECTURE behavior OF tb_isDetector IS
 
    signal clk,detectedBit,reset : std_logic := '0';
    signal bitInput : std_logic_vector(7 downto 0) := x"00";
+   signal ErrInic,numErrores : integer:=0;
    constant clk_period : time := 10 ns;
    component is_Detection is
     port (
       clk: in std_logic;
       reset : in std_logic;
       bitInput : in std_logic_vector(7 downto 0);
-      detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+      ErrInic  : in integer :=0;
+      detectedBit : out std_logic;
+      numErrores : out integer:=0 -- '1' si ha detectado la secuencia.
     ) ;
   end component;
 
 BEGIN
- detector: is_Detection port map (clk,reset,bitInput,detectedBit);
+ detector: is_Detection port map (clk,reset,bitInput,ErrInic,detectedBit,numErrores);
    clk_process :process
    begin
         clk <= '0';
