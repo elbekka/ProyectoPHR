@@ -6,7 +6,9 @@ entity end_Detector is
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
-    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+    ErrInic  : in integer :=0;
+    detectedBit : out std_logic;
+    numErrores : out integer:=0 
   ) ;
 end end_Detector;
 
@@ -14,6 +16,7 @@ architecture Behavioral of end_Detector is
 type estado is (E,N,D,space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charE,charN,charD,charSpace,estadoAnt: std_logic:='0';
+    signal err : integer := 0;
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
@@ -71,6 +74,11 @@ begin
             end if;
         when trampa =>
         if(charSpace = '1')then
+            if(err< ErrInic)then
+                err <= ErrInic;
+            end if;
+            numErrores <= err + 1 ;
+            err <=err +1 ;
             estado_sig<= E;
         else
             estado_sig <=trampa;

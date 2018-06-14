@@ -6,15 +6,17 @@ entity entityClaus is
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
-    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+    ErrInic  : in integer :=0;
+    detectedBit : out std_logic;
+    numErrores : out integer:=0 
   ) ;
 end entity;
 
 architecture behavioral of entityClaus is
 
   signal entDetected,charDetected,isDetected,endDetected,charPuntoComa,charSpace: std_logic := '0';
-  signal numErrores : integer :=0;
   signal estadoAc : integer := 0;
+  signal finalerr: integer :=0;
   type estado is (stringEntity1,stringChar,stringIs,stringEnd,stringEntity2,puntoComa);
   signal estado_ini,estado_sig: estado ;
 
@@ -23,7 +25,9 @@ architecture behavioral of entityClaus is
           clk: in std_logic;
           reset : in std_logic;
           bitInput : in std_logic_vector(7 downto 0);
-          detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+          ErrInic  : in integer :=0;
+          detectedBit : out std_logic;
+          numErrores : out integer:=0  -- '1' si ha detectado la secuencia.
         ) ;
     end component;
   component CharDetector is
@@ -39,7 +43,9 @@ architecture behavioral of entityClaus is
           clk: in std_logic;
           reset : in std_logic;
           bitInput : in std_logic_vector(7 downto 0);
-          detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+          ErrInic  : in integer :=0;
+          detectedBit : out std_logic;
+          numErrores : out integer:=0 
         ) ;
     end component;
   component end_Detector is
@@ -47,7 +53,9 @@ architecture behavioral of entityClaus is
       clk: in std_logic;
       reset : in std_logic;
       bitInput : in std_logic_vector(7 downto 0);
-      detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+      ErrInic  : in integer :=0;
+      detectedBit : out std_logic;
+      numErrores : out integer:=0 
     ) ;
     end component;
   component memCompare is
@@ -58,7 +66,7 @@ architecture behavioral of entityClaus is
     ) ;
     end component;
 begin
- entDetector : entityDetection port map (clk,reset,bitInput,entDetected);
+ entDetector : entityDetection port map (clk,reset,ErrInic,bitInput,entDetected);
  charDetect : CharDetector port map (clk,reset,bitInput,charDetected);
  isDetector : is_Detection port map (clk,reset,bitInput,isDetected);
  endDetector : end_Detector port map(clk,reset,bitInput,endDetected);
