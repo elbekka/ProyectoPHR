@@ -1,7 +1,0 @@
-v 4
-file . "vhdl/moduloMemoria/staticMemCompare.vhdl" "94b25940cf8a1ba7068767cf6391495024716077" "20180615144108.748":
-  entity memcompare at 1( 0) + 0 on 13;
-  architecture arquitectura of memcompare at 12( 219) + 0 on 14;
-file . "vhdl/moduloMemoria/Comparador8bits.vhdl" "a2875ed7b3e54591b61ae83e531517a32c4f0325" "20180615144108.162":
-  entity comp8bits at 1( 0) + 0 on 11;
-  architecture dataflow of comp8bits at 12( 227) + 0 on 12;
