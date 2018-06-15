@@ -41,6 +41,25 @@ begin
      end process;
      process (charCaracter,charSpace,estado_ini)
      begin
+<<<<<<< HEAD
       detectedBit<= charCaracter;
+=======
+      case estado_ini is
+        when C =>
+        if(charCaracter = '1') then
+            detectedBit<='0';
+            estado_sig <=space;
+        else
+            estado_sig<=space;
+        end if;
+        when space =>
+        if(charSpace = '1')then
+            detectedBit<='1';
+            estado_sig<=C;
+        else
+            estado_sig <=C;
+            end if;
+    end case;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
      end process;
 end Behavioral ; -- Behavioral

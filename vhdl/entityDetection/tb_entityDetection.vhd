@@ -81,12 +81,16 @@ BEGIN
       bitInput <= x"79";             --y
       wait for clk_period;
       bitInput <= x"20";            --space
+<<<<<<< HEAD
       wait for clk_period;
       bitInput <= x"79";             --y
       wait for clk_period;
       bitInput <= x"20";            --space
       wait for clk_period;
       wait;              
+=======
+      wait;                
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
    end process;
 
 END;

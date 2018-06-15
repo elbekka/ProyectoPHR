@@ -8,10 +8,17 @@ end entity;
 architecture dataFlow of tb_StaticMemCompare is
  signal charInput : std_logic_vector(7 downto 0);
  signal isCorrect : std_logic;
+<<<<<<< HEAD
  signal address : integer range 0 to 30 ;
     component memCompare
     port (   charInput : in std_logic_vector(7 downto 0);
              address   : in integer range 0 to 30 ;
+=======
+ signal address : integer range 0 to 25 ;
+    component memCompare
+    port (   charInput : in std_logic_vector(7 downto 0);
+             address   : in integer range 0 to 25 ;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
              isCorrect : out std_logic
     );
     end component;

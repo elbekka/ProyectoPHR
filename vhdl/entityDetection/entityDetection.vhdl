@@ -3,7 +3,10 @@ use ieee.std_logic_1164.all;
 
 entity entityDetection is
   port (
+<<<<<<< HEAD
    
+=======
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
@@ -15,7 +18,11 @@ architecture arquitectura of entityDetection is
  type estado is (E,N,T1,I,T2,Y, space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charE,charN,charT,charI,charY,charSpace,estadoAnt: std_logic:='0';
+<<<<<<< HEAD
 
+=======
+    signal estadoTrampa : std_logic:= '0' ;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     component memCompare
     port (
     charInput : in std_logic_vector(7 downto 0);
@@ -26,13 +33,20 @@ architecture arquitectura of entityDetection is
 
 begin
 --LLAMADAS A LAS ENTIDADES
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
 memCompareE : memCompare port map (bitInput,4,isCorrect=>charE);
 memCompareN : memCompare port map (bitInput,13,isCorrect=>charN);
 memCompareT : memCompare port map (bitInput,19,isCorrect=>charT);
 memCompareI : memCompare port map (bitInput,8,isCorrect=>charI);
 memCompareY : memCompare port map (bitInput,24,isCorrect=>charY);
 memCompareSpace : memCompare port map(bitInput,26,isCorrect=>charSpace);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
 process (clk , reset)
 begin   
     if(reset = '1') then 
@@ -49,7 +63,11 @@ begin
         detectedBit<='0';
         estado_sig <=N;
     elsif(estadoAnt = '1' and charSpace ='1') then 
+<<<<<<< HEAD
     detectedBit<='1';
+=======
+        detectedBit<='1';
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     else
     detectedBit<='0';
     estadoAnt <='0';
@@ -99,6 +117,10 @@ begin
         estado_sig<= E;
     else
         estado_sig <=trampa;
+<<<<<<< HEAD
+=======
+        detectedBit<='0';
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     end if;
     when others => 
         estadoAnt <='0';

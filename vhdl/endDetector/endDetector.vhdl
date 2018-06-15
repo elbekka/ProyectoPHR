@@ -2,11 +2,19 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity end_Detector is
+<<<<<<< HEAD
   port ( 
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
     detectedBit : out std_logic
+=======
+  port (
+    clk: in std_logic;
+    reset : in std_logic;
+    bitInput : in std_logic_vector(7 downto 0);
+    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
   ) ;
 end end_Detector;
 
@@ -71,9 +79,16 @@ begin
             end if;
         when trampa =>
         if(charSpace = '1')then
+<<<<<<< HEAD
            estado_sig<=E;
         else
         estado_sig <=trampa;
+=======
+            estado_sig<= E;
+        else
+            estado_sig <=trampa;
+            detectedBit<='0';
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
         when others => 
             estadoAnt <='0';

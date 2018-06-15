@@ -6,7 +6,11 @@ entity is_Detection is
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
+<<<<<<< HEAD
     detectedBit : out std_logic
+=======
+    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
   ) ;
 end is_Detection;
 
@@ -65,8 +69,13 @@ begin
             end if;
         when trampa =>
         if(charSpace = '1')then
+<<<<<<< HEAD
             estado_sig<=I;
         else 
+=======
+            estado_sig<= I;
+        else
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
             estado_sig <=trampa;
         end if;
         when others => 

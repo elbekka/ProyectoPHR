@@ -6,17 +6,27 @@ entity logic_Detector is
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
+<<<<<<< HEAD
     ErrInic  : in integer :=0;
     detectedBit : out std_logic; -- '1' si ha detectado la secuencia.
     numErrores : out integer:=0 
+=======
+    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
   ) ;
 end logic_Detector;
 
 architecture Behavioral of logic_Detector is
+<<<<<<< HEAD
 type estado is (A,N,D,O,R,X,O1,R1,N1,A1,N3,space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charA,charN,charD,charO,charR,charX,charSpace,estadoAnt: std_logic:='0';
     signal err : integer := 0;
+=======
+type estado is (A,N,D,O,R,X,O1,R1,N1,A1,N3,space);
+    signal estado_ini,estado_sig: estado ;
+    signal charA,charN,charD,charO,charR,charX,charSpace,estadoAnt: std_logic:='0';
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
@@ -61,42 +71,66 @@ begin
         else
         detectedBit<='0';
         estadoAnt <='0';
+<<<<<<< HEAD
         estado_sig <=trampa;
+=======
+        estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 ------------------------------------------
         when N =>
         if(charN = '1') then
                 estado_sig<=D ;
         else
+<<<<<<< HEAD
                 estado_sig <=trampa;
+=======
+                estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 ------------------------------------------- 
         when D =>
         if(charD = '1') then
             estado_sig <=space;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 --------------------------------------
 	when O =>
         if(charO = '1') then
             estado_sig <=R;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 --------------------------------------------
 	when R =>
         if(charR = '1') then
             estado_sig <=space;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 -------------------------------------------------------
 	when X =>
         if(charX = '1') then
             estado_sig <=O1;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 -----------------------------------
 when O1 =>
@@ -105,28 +139,44 @@ when O1 =>
 	elsif(charN = '1')then
 	    estado_sig <=O;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 --------------------------
 when R1 =>
         if(charR = '1') then
             estado_sig <=space;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 ----------------------------
 when N1 =>
         if(charN = '1') then
             estado_sig <=A1;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 -------------------------------
 when A1 =>
         if(charA = '1') then
             estado_sig <=N3;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 -------------------------------
 when N3 =>
@@ -135,7 +185,11 @@ when N3 =>
 	elsif(charO = '1')then
 	    estado_sig <=O;
         else
+<<<<<<< HEAD
             estado_sig <=trampa;
+=======
+            estado_sig <=A;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
 -----------------------------
         when space =>
@@ -144,6 +198,7 @@ when N3 =>
             estadoAnt<='1';
             estado_sig<=A;
         else
+<<<<<<< HEAD
             estado_sig<=trampa;
             estadoAnt<= '0';
             end if;
@@ -159,6 +214,12 @@ end if;
 else
     estado_sig <=trampa;
 end if;
+=======
+            estado_sig<=A;
+            estadoAnt<= '0';
+            end if;
+
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
 
         when others => estadoAnt <='0';
     end case;

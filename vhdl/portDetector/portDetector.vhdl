@@ -6,6 +6,7 @@ entity port_Detector is
     clk: in std_logic;
     reset : in std_logic;
     bitInput : in std_logic_vector(7 downto 0);
+<<<<<<< HEAD
     ErrInic  : in integer :=0;
     detectedBit : out std_logic; -- '1' si ha detectado la secuencia.
     numErrores : out integer:=0
@@ -17,6 +18,16 @@ type estado is (P,O,R,T,space,trampa);
     signal estado_ini,estado_sig: estado ;
     signal charP,charO,charR,charT,charSpace,estadoAnt: std_logic:='0';
     signal err : integer := 0;
+=======
+    detectedBit : out std_logic -- '1' si ha detectado la secuencia.
+  ) ;
+end port_Detector;
+
+architecture Behavioral of port_Detector is
+type estado is (P,O,R,T,space);
+    signal estado_ini,estado_sig: estado ;
+    signal charP,charO,charR,charT,charSpace,estadoAnt: std_logic:='0';
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     component memCompare is
         port (
           charInput : in std_logic_vector(7 downto 0);
@@ -41,7 +52,10 @@ begin
      process (charP,charO,charR,charT,charSpace,estado_ini)
      begin
       case estado_ini is
+<<<<<<< HEAD
 ------------------------------------------------------------------------------------------------
+=======
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     when P =>
         if(charP = '1') then
             detectedBit<='0';
@@ -51,20 +65,30 @@ begin
         else
         detectedBit<='0';
         estadoAnt <='0';
+<<<<<<< HEAD
         estado_sig <=trampa;
 ------------------------------------------------------------------------------------------------
+=======
+        estado_sig <=P;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
         end if;
    when O =>
         if(charO = '1') then
                 estado_sig<=R ;
         else
+<<<<<<< HEAD
                 estado_sig <=trampa;
         end if; 
 ------------------------------------------------------------------------------------------------
+=======
+                estado_sig <=P;
+        end if; 
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
    when R =>
         if(charR = '1') then
                 estado_sig<=T ;
         else
+<<<<<<< HEAD
                 estado_sig <=trampa;
         end if; 
 ------------------------------------------------------------------------------------------------
@@ -75,12 +99,23 @@ begin
             estado_sig <=trampa;
         end if;
 ------------------------------------------------------------------------------------------------
+=======
+                estado_sig <=P;
+        end if; 
+   when T =>
+        if(charP = '1') then
+            estado_sig <=space;
+        else
+            estado_sig <=P;
+        end if;
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
    when space =>
         if(charSpace = '1')then
             detectedBit<='1';
             estadoAnt<='1';
             estado_sig<=P;
         else
+<<<<<<< HEAD
             estado_sig<=trampa;
             estadoAnt<= '0';
             end if;
@@ -98,6 +133,12 @@ begin
             end if;
         when others => estadoAnt <='0';
                 estado_sig<=trampa;  --ocurrido un error;
+=======
+            estado_sig<=P;
+            estadoAnt<= '0';
+            end if;
+        when others => estadoAnt <='0';
+>>>>>>> 3b763639ed0bad0f997d313038832aae96ef71db
     end case;
      end process;
 end Behavioral ; -- Behavioral
